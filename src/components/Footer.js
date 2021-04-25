@@ -1,7 +1,5 @@
 import React from "react";
 import {Grid, Row, Col} from "react-flexbox-grid";
-import {faCog} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFacebook, faGithub, faLinkedin} from "@fortawesome/free-brands-svg-icons";
 import FooterLink from "./FooterLink";
 
