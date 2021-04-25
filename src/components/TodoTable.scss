@@ -1,0 +1,29 @@
+.todo-table {
+  border: 1px solid #aaa;
+  border-radius: 1rem;
+
+  .todo-header {
+    margin: 0;
+    padding: .5rem;
+    color: #555;
+    border-bottom: 1px solid #aaa;
+  }
+
+  .todo-row {
+    margin: 0;
+    padding: .5rem;
+    color: #fff;
+    background-color: #cc476a;
+    border-bottom: 1px solid #aaa;
+    &:last-child {
+      border-bottom: none;
+      border-bottom-left-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+    }
+  }
+
+  .completed {
+    color: #004d2e;
+    background-color: #9aedbe;
+  }
+}
