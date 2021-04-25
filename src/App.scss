@@ -1,3 +1,5 @@
+@import 'node_modules/react-redux-toastr/src/styles/index';
+
 .app-layout {
   height: 100vh;
   display: flex;
@@ -69,6 +71,50 @@
 
   .cursor-pointer {
     cursor: pointer;
+  }
+
+  .todo-table-wrapper {
+    height: 50vh;
+  }
+
+  .data-message {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 2.5rem;
+    color: #999;
+  }
+
+  .todo-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .add-todo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 15vh;
+    padding-left: .5rem;
+    color: #47a5ed;
+  }
+
+  .app-buttons-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    padding: 1rem .75rem;
+
+    .app-button {
+      border: 1px solid #47a5ed;
+      color: #47a5ed;
+      padding: .5rem 1.25rem;
+      margin-right: 1rem;
+      border-radius: .5rem;
+      cursor: pointer;
+    }
   }
 }
 
