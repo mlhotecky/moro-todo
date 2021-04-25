@@ -6,7 +6,6 @@ export default function Header() {
         <div className="app-header">
             <div className="header-content">
                 <div>Todo app </div>
-                <Settings />
             </div>
         </div>
     )
