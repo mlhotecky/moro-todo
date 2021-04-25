@@ -1,24 +1,10 @@
-import React from "react";
-import { Field, reduxForm } from 'redux-form'
+import React, {useState} from "react";
 import {Grid, Row, Col} from "react-flexbox-grid";
 import ApiLoader from "../components/ApiLoader";
 import "../components/Modals/ModalWindow.scss";
 import "./Forms.scss";
 
-const validate = values => {
-    const errors = {}
-
-    if (!values.text) {
-        errors.text = 'Required'
-    }
-    return errors
-}
-
-function CreateUpdateTodoForm(props) {
-    const {
-        submitting,
-        handleSubmit,
-    } = props;
+export default function CreateUpdateTodoForm(props) {
 
     const {
         actionHandler,
@@ -26,24 +12,67 @@ function CreateUpdateTodoForm(props) {
         actionText,
         closeModal,
         cancelText,
+        initial
     } = props?.todoObject || {};
 
-    const renderField = ({ input, label, type, meta: { asyncValidating, touched, error } }) => (
-        <div>
-            <label>{label}</label>
-            <div className={asyncValidating ? 'async-validating' : ''}>
-                <input {...input} type={type} />
-                {touched && error && <span>{error}</span>}
-            </div>
-        </div>
-    )
+    const initialFields = {
+        text: ""
+    }
 
-        return <form onSubmit={handleSubmit}>
+    const [value, setValue] = useState(initial || initialFields);
+    const [touched, setTouched] = useState([]);
+
+    const formFields = ["text"];
+    const val = (name) => value?.[name] || "";
+    const validForm = value?.text?.length > 0;
+
+    const touchField = ({target: {name, value}}) => {
+        const newTouched = [...touched];
+        if (!newTouched.includes(name)) {
+        newTouched.push(name);
+        }
+        setTouched(newTouched);
+    }
+
+    function touchAll() {
+        const newTouched = [];
+        formFields.forEach(name => {
+            newTouched.push(name);
+        })
+        setTouched(newTouched);
+    }
+
+    const handleChange = ({target: {name, value}}) => {
+        setValue({
+            ...value,
+            [name]: value
+        });
+    }
+
+    function submitHandler() {
+        if (validForm) {
+        actionHandler(value);
+        } else {
+            touchAll();
+        }
+    }
+
+    return (
+        <>
             <div className="modal-body create-update-form">
                 <Grid>
                     <Row>
                         <Col sm={12} className="form-group">
-                            <Field name="text" type="text" component={renderField} label="Text of todo" />
+                            <label>Text of todo</label>
+                                <input
+                                    type="text"
+                                    name="text"
+                                    value={val("text")}
+                                    onChange={handleChange}
+                                    onBlur={touchField}
+                                />
+                                {touched?.includes("text") && value?.text?.length === 0 &&
+                                <span className="form-error">Required</span>}
                         </Col>
                     </Row>
                 </Grid>
@@ -52,31 +81,14 @@ function CreateUpdateTodoForm(props) {
                 {
                     actionPending ? <div className="modal-loader">
                         <ApiLoader height={33} width={33} color="#fff"/>
-                    </div> : <button
-                        type="submit"
-                        disabled={submitting}
+                    </div> : <div
+                        onClick={submitHandler}
                         className="modal-button">
                         {actionText || "Submit"}
-                    </button>
+                    </div>
                 }
                 <div className="modal-button" onClick={closeModal}>{cancelText || "Cancel"}</div>
             </div>
-        </form>
+        </>
+    )
 }
-
-function mapStateToProps(state, props) {
-    console.log(props.todoObject.text)
-    return {
-        initialValues: {
-            text: props?.todoObject?.text || ""
-        }
-    }
-}
-
-CreateUpdateTodoForm = reduxForm({
-    // a unique name for the form
-    form: 'TodoForm',
-    validate,
-}, mapStateToProps)(CreateUpdateTodoForm)
-
-export default CreateUpdateTodoForm;

@@ -21,9 +21,9 @@ export default function App() {
     const [createTodoModal, setCreateTodoModal] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    function handleCreateTodo(text) {
+    function handleCreateTodo(todo) {
         setLoading(true);
-        dispatch(createTodo(text,
+        dispatch(createTodo(todo,
             () => {
                 toastr.success("Success!", "Todo successfully added.")
             },
@@ -32,6 +32,7 @@ export default function App() {
             },
             () => {
                 setLoading(false);
+                setCreateTodoModal(false);
             }
             ),
         )

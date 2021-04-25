@@ -21,7 +21,7 @@ export default function TodoTable(props) {
     const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
     const [updateModal, setUpdateModal] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [todo, setTodo] = useState(null);
+    const [initTodo, setInitTodo] = useState(null);
     const [id, setId] = useState(null);
 
     function deleteTodoConfirm(id) {
@@ -32,10 +32,10 @@ export default function TodoTable(props) {
     function updateTodoModal(todo) {
         setUpdateModal(true);
         setId(todo.id);
-        setTodo({text: todo.text});
+        setInitTodo({text: todo.text});
     }
 
-    function handleUpdateTodo() {
+    function handleUpdateTodo(todo) {
         setLoading(true);
         dispatch(updateTodo(id, todo,
             () => {
@@ -46,8 +46,9 @@ export default function TodoTable(props) {
             },
             () => {
                 setId(null);
-                setTodo(null);
+                setInitTodo(null);
                 setLoading(false);
+                setUpdateModal(false);
             }
             )
         )
@@ -86,14 +87,12 @@ export default function TodoTable(props) {
         )
     }
 
-    console.log()
-
     return (
         <>
             <ModalConfirm
                 isOpen={deleteConfirmModal}
                 closeModal={() => setDeleteConfirmModal(false)}
-                content={() => <div>Delete this todo?</div>}
+                confirmText="Delete this todo?"
                 headerText="Delete Todo"
                 actionHandler={handleDeleteTodo}
                 actionText="Delete"
@@ -102,11 +101,12 @@ export default function TodoTable(props) {
             <ModalForm
                 isOpen={updateModal}
                 closeModal={() => setUpdateModal(false)}
-                formComponent={(props) => <CreateUpdateTodoForm todoObject={{...props, text: todo?.text || "" }} />}
+                formComponent={(props) => <CreateUpdateTodoForm todoObject={{...props, text: initTodo?.text || "" }} />}
                 headerText="Update Todo"
                 actionHandler={handleUpdateTodo}
                 actionText="Update"
                 actionPending={loading}
+                initial={initTodo}
             />
             <div className="todo-table">
                 <Row className="todo-header">

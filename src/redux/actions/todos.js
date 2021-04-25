@@ -6,21 +6,6 @@ import {API_PREFIX} from "../../constants";
 // returns all todos
 export const GET_TODOS = "GET_TODOS";
 
-// creates item with given text, then returns it
-export const ADD_TODO = "ADD_TODO";
-
-// updates text of given item
-export const UPDATE_TODO = "UPDATE_TODO";
-
-// delete selected item
-export const DELETE_TODO = "DELETE_TODO";
-
-// complete selected item
-export const COMPLETE_TODO = "COMPLETE_TODO";
-
-// incomplete selected item
-export const INCOMPLETE_TODO = "INCOMPLETE_TODO";
-
 // universal const for catch phase of api call
 export const GET_ALL_TODO_STATUS = "GET_ALL_TODO_STATUS";
 
@@ -43,20 +28,6 @@ export const getAllTodos = (error = () => {}) => dispatch => {
     axios({
         method: 'get',
         url: `${API_PREFIX}/todos`
-    }).then(res => {
-        dispatch(getTodoStatus(SUCCEEDED));
-        dispatch(storeTodos(res.data));
-    }).catch(e => {
-        dispatch(getTodoStatus(REJECTED));
-        error(e.response.status);
-    })
-}
-
-export const getCompletedTodos = (error = () => {}) => dispatch => {
-    dispatch(getTodoStatus(PENDING));
-    axios({
-        method: 'get',
-        url: `${API_PREFIX}/todos/completed`
     }).then(res => {
         dispatch(getTodoStatus(SUCCEEDED));
         dispatch(storeTodos(res.data));
@@ -111,7 +82,7 @@ export const deleteTodo = (
     error = () => {},
     final = () => {}) => dispatch => {
     axios({
-        method: 'post',
+        method: 'delete',
         url: `${API_PREFIX}/todos/${id}`
     }).then(res => {
         dispatch(getAllTodos());
