@@ -1,0 +1,15 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  input {
+    border: 1px solid #ccc;
+    padding: .5rem 1.25rem;
+    border-radius: .5rem;
+  }
+}
+
+.create-update-form {
+  max-width: 300px;
+}
