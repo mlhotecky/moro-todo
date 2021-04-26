@@ -10,7 +10,6 @@ export default function TodoList(props) {
     const dispatch = useDispatch();
     const todosList = useSelector(state => state.todos.todosList);
     const getTodoStatus = useSelector(state => state.todos.todoStatus);
-    const {onlyCompleted} = props;
 
     useEffect(() => {
         dispatch(getAllTodos((error) => {
@@ -18,9 +17,6 @@ export default function TodoList(props) {
         }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // filter completed todos by state not by action
-    const todos = onlyCompleted ? todosList.filter(todo => todo.completed) : todosList;
 
     let content;
 
@@ -37,7 +33,7 @@ export default function TodoList(props) {
             )
             break;
         case SUCCEEDED:
-            if (todos?.length === 0) {
+            if (todosList?.length === 0) {
                 content = (
                     <div className="todo-table-wrapper">
                         {dataMessageWrapper("No data.")}
@@ -46,7 +42,7 @@ export default function TodoList(props) {
             } else {
                 content = (
                     <div className="todo-table-wrapper">
-                        <TodoTable data={todos}/>
+                        <TodoTable data={todosList}/>
                     </div>
                 )
             }

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {toastr} from "react-redux-toastr";
 import {Row, Col} from "react-flexbox-grid";
@@ -14,6 +14,7 @@ import ModalConfirm from "./Modals/ModalConfirm";
 import CreateUpdateTodoForm from "../forms/CreateUpdateTodoForm";
 import "./TodoTable.scss";
 import ModalForm from "./Modals/ModalForm";
+import {ALL, COMPLETED, NOT_DONE} from "../constants";
 
 export default function TodoTable(props) {
     const dispatch = useDispatch();
@@ -23,6 +24,25 @@ export default function TodoTable(props) {
     const [loading, setLoading] = useState(false);
     const [initTodo, setInitTodo] = useState(null);
     const [id, setId] = useState(null);
+    const [filter, setFilter] = useState(ALL);
+
+    let filteredData;
+
+    switch (filter) {
+        case COMPLETED:
+            filteredData = data.filter(todo => todo.completed);
+            console.log(data.filter(todo => todo.completed))
+            break;
+        case NOT_DONE:
+            filteredData = data.filter(todo => !todo.completed);
+            console.log(data.filter(todo => !todo.completed));
+            break;
+        case ALL:
+            filteredData = data;
+            break;
+        default:
+            filteredData = data
+    }
 
     function deleteTodoConfirm(id) {
         setDeleteConfirmModal(true);
@@ -87,6 +107,8 @@ export default function TodoTable(props) {
         )
     }
 
+    console.log(filteredData)
+
     return (
         <>
             <ModalConfirm
@@ -110,53 +132,76 @@ export default function TodoTable(props) {
             />
             <div className="todo-table">
                 <Row className="todo-header">
-                    <Col xs={7}>Description</Col>
+                    <Col xs={6}>Description</Col>
                     <Col xs={2}>Created</Col>
                     <Col xs={2}>Completed</Col>
-                    <Col xs={1}>Actions</Col>
+                    <Col xs={2} className="actions">Actions</Col>
                 </Row>
-                {data.length > 0 && data.map((todo, index) => {
+                {filteredData.length > 0 && filteredData.map((todo, index) => {
                     return <Row key={index} className={`todo-row ${todo?.completed ? "completed" : ""}`}>
-                        <Col xs={7}>{todo?.text || ""}</Col>
-                        <Col xs={2}>{todo?.createdDate ? new Date(todo.createdDate).toDateString() : ""}</Col>
-                        <Col xs={2}>{todo?.completedDate ? new Date(todo.completedDate).toDateString() : ""}</Col>
-                        <Col xs={1}>
-                            <Row>
-                                <Col xs={4}>
-                                    <FontAwesomeIcon
-                                        className="cursor-pointer"
-                                        icon={faPencilAlt}
-                                        onClick={() => updateTodoModal(todo)}
-                                    />
-                                </Col>
+                        <Col lg={6} md={6} sm={12}>
+                            <span className="mobile-header">Description: </span>
+                            <span>{todo?.text || ""}</span>
+                        </Col>
+                        <Col lg={2} md={2} sm={12}>
+                            <span className="mobile-header">Created: </span>
+                            <span>{todo?.createdDate ? new Date(todo.createdDate).toDateString() : ""}</span>
+                        </Col>
+                        <Col lg={2} md={2} sm={12}>
+                            <span className="mobile-header">Completed: </span>
+                            <span>{todo?.completedDate ? new Date(todo.completedDate).toDateString() : ""}</span>
+                        </Col>
+                        <Col lg={2} md={2} sm={12}>
+                            <Row className="table-actions">
+                                <FontAwesomeIcon
+                                    className="cursor-pointer"
+                                    icon={faPencilAlt}
+                                    onClick={() => updateTodoModal(todo)}
+                                />
                                 {todo?.completed ?
-                                    <Col xs={4}>
-                                        <FontAwesomeIcon
-                                            className="cursor-pointer"
-                                            icon={faRedo}
-                                            onClick={() => incompleteTodoHandler(todo.id)}
-                                        />
-                                    </Col>
-                                    :
-                                    <Col xs={4}>
-                                        <FontAwesomeIcon
-                                            className="cursor-pointer"
-                                            icon={faCheck}
-                                            onClick={() => completeTodoHandler(todo.id)}
-                                        />
-                                    </Col>
-                                }
-                                <Col xs={4}>
                                     <FontAwesomeIcon
                                         className="cursor-pointer"
-                                        onClick={() => deleteTodoConfirm(todo.id)}
-                                        icon={faTrash}
+                                        icon={faRedo}
+                                        onClick={() => incompleteTodoHandler(todo.id)}
                                     />
-                                </Col>
+                                    :
+                                    <FontAwesomeIcon
+                                        className="cursor-pointer"
+                                        icon={faCheck}
+                                        onClick={() => completeTodoHandler(todo.id)}
+                                    />
+                                }
+                                <FontAwesomeIcon
+                                    className="cursor-pointer"
+                                    onClick={() => deleteTodoConfirm(todo.id)}
+                                    icon={faTrash}
+                                />
                             </Row>
                         </Col>
                     </Row>
                 })}
+                <Row className="table-footer">
+                    <Col lg={3} md={3} className="counter">
+                        <span>Count(done): {filteredData.filter(t => t.completed).length}</span>
+                    </Col>
+                    <Col lg={6} md={6} className="table-btn-wrapper">
+                        <div
+                            className={`table-button ${filter === COMPLETED ? "active" : ""}`}
+                            onClick={() => setFilter(COMPLETED)}>
+                            Completed
+                        </div>
+                        <div
+                            className={`table-button ${filter === NOT_DONE ? "active" : ""}`}
+                            onClick={() => setFilter(NOT_DONE)}>
+                            Not done
+                        </div>
+                        <div
+                            className={`table-button ${filter === ALL ? "active" : ""}`}
+                            onClick={() => setFilter(ALL)}>
+                            All
+                        </div>
+                    </Col>
+                </Row>
             </div>
         </>
     )

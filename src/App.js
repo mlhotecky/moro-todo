@@ -17,7 +17,6 @@ Modal.setAppElement("#root");
 export default function App() {
     const dispatch = useDispatch();
     const getTodoStatus = useSelector(state => state.todos.todoStatus);
-    const [onlyCompleted, setOnlyCompleted] = useState(false);
     const [createTodoModal, setCreateTodoModal] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -58,13 +57,8 @@ export default function App() {
                       onClick={() => setCreateTodoModal(true)}>
                       Add todo
                   </div>
-                  <div
-                      className="app-button"
-                      onClick={() => setOnlyCompleted(!onlyCompleted)}>
-                      {`${onlyCompleted ? "Show all" : "Show completed"}`}
-                  </div>
               </div>}
-              <TodoList onlyCompleted={onlyCompleted}/>
+              <TodoList />
           </Grid>
           <Footer/>
       </div>
