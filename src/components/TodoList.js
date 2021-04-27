@@ -46,7 +46,7 @@ export default function TodoList(props) {
             } else {
                 content = (
                     <div className="todo-table-wrapper">
-                        <TodoTable data={todosList}/>
+                        <TodoTable data={todosList.sort((a,b) => new Date(b.createdDate) - new Date(a.createdDate))}/>
                     </div>
                 )
             }

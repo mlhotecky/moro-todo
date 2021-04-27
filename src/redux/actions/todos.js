@@ -9,6 +9,11 @@ export const GET_TODOS = "GET_TODOS";
 // universal const for get phase of api call
 export const GET_ALL_TODO_STATUS = "GET_ALL_TODO_STATUS";
 
+// dont get all todos but only modify reducer after action
+export const ADD_TODO = "ADD_TODO";
+export const MODIFY_TODO = "MODIFY_TODO";
+export const REMOVE_TODO = "REMOVE_TODO";
+
 export const PENDING = "PENDING";
 export const SUCCEEDED = "SUCCEEDED";
 export const REJECTED = "REJECTED";
@@ -23,6 +28,21 @@ const storeTodos = todos => ({
    payload: todos
 });
 
+const addTodo = todo => ({
+    type: ADD_TODO,
+    payload: todo
+})
+
+const modifyTodo = todo => ({
+    type: MODIFY_TODO,
+    payload: todo
+})
+
+const removeTodo = id => ({
+    type: REMOVE_TODO,
+    payload: id
+})
+
 export const getAllTodos = (error = () => {}) => dispatch => {
     dispatch(getTodoStatus(PENDING));
     axios({
@@ -33,7 +53,7 @@ export const getAllTodos = (error = () => {}) => dispatch => {
         dispatch(storeTodos(res.data));
     }).catch(e => {
         dispatch(getTodoStatus(REJECTED));
-        error(e.response.status);
+        error(e?.response?.status || "Error");
     })
 }
 
@@ -47,10 +67,10 @@ export const createTodo = (
         url: `${API_PREFIX}/todos`,
         data: {...todo}
     }).then(res => {
-        dispatch(getAllTodos());
+        dispatch(addTodo(res.data))
         success();
     }).catch(e => {
-        error(e.response.status);
+        error(e?.response?.status || "Error");
     }).finally(() => {
         final();
     })
@@ -67,10 +87,10 @@ export const updateTodo = (
         url: `${API_PREFIX}/todos/${id}`,
         data: {...todo}
     }).then(res => {
-        dispatch(getAllTodos());
+        dispatch(modifyTodo(res.data))
         success();
     }).catch(e => {
-        error(e.response.status);
+        error(e?.response?.status || "Error");
     }).finally(() => {
         final();
     })
@@ -85,10 +105,10 @@ export const deleteTodo = (
         method: 'delete',
         url: `${API_PREFIX}/todos/${id}`
     }).then(res => {
-        dispatch(getAllTodos());
+        dispatch(removeTodo(id));
         success();
     }).catch(e => {
-        error(e.response.status);
+        error(e?.response?.status || "Error");
     }).finally(() => {
         final();
     })
@@ -99,9 +119,9 @@ export const completeTodo = (id, error = () => {}) => dispatch => {
         method: 'post',
         url: `${API_PREFIX}/todos/${id}/complete`
     }).then(res => {
-        dispatch(getAllTodos());
+        dispatch(modifyTodo(res.data));
     }).catch(e => {
-        error(e.response.status);
+        error(e?.response?.status || "Error");
     })
 }
 
@@ -110,9 +130,9 @@ export const incompleteTodo = (id, error = () => {}) => dispatch => {
         method: 'post',
         url: `${API_PREFIX}/todos/${id}/incomplete`
     }).then(res => {
-        dispatch(getAllTodos());
+        dispatch(modifyTodo(res.data));
     }).catch(e => {
-        error(e.response.status);
+        error(e?.response?.status || "Error");
     })
 }
 

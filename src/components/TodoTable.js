@@ -92,6 +92,7 @@ export default function TodoTable(props) {
             () => {
                 setId(null);
                 setLoading(false);
+                setDeleteConfirmModal(false);
             }
             )
         )
