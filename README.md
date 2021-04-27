@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Todo list created by React
+
+Work with API by https://github.com/morosystems/todo-be
+
+You need to run backend with default port 8080, if you want change it, API prefix is defined in constants.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
