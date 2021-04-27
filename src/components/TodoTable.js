@@ -28,14 +28,14 @@ export default function TodoTable(props) {
 
     let filteredData;
 
+    // filtering data by buttons in footer of table
+    // only completed, only not done, all todos
     switch (filter) {
         case COMPLETED:
             filteredData = data.filter(todo => todo.completed);
-            console.log(data.filter(todo => todo.completed))
             break;
         case NOT_DONE:
             filteredData = data.filter(todo => !todo.completed);
-            console.log(data.filter(todo => !todo.completed));
             break;
         case ALL:
             filteredData = data;
@@ -44,17 +44,21 @@ export default function TodoTable(props) {
             filteredData = data
     }
 
+    // show confirm modal and set id by row of table
     function deleteTodoConfirm(id) {
         setDeleteConfirmModal(true);
         setId(id);
     }
 
+    // show form modal, set id and original text (initial form value) by row of table
     function updateTodoModal(todo) {
         setUpdateModal(true);
         setId(todo.id);
         setInitTodo({text: todo.text});
     }
 
+    // update text of choosen todo
+    // all create / update / delete action solved by callback not by reducer state and asynchronous toastr messages
     function handleUpdateTodo(todo) {
         setLoading(true);
         dispatch(updateTodo(id, todo,
@@ -74,6 +78,8 @@ export default function TodoTable(props) {
         )
     }
 
+    // delete choosen todo
+    // all create / update / delete action solved by callback not by reducer state and asynchronous toastr messages
     function handleDeleteTodo() {
         setLoading(true);
         dispatch(deleteTodo(id,
@@ -91,6 +97,9 @@ export default function TodoTable(props) {
         )
     }
 
+    // complete choosen todo
+    // there is unnecessary define toastr success because it will be a often action and its not comfortable to fire info
+    // every time when i want solve for example about 5 or 10 todos in one time
     function completeTodoHandler(id) {
         dispatch(completeTodo(id,
             (error) => {
@@ -98,6 +107,9 @@ export default function TodoTable(props) {
             }))
     }
 
+    // incomplete choosen todo
+    // there is unnecessary define toastr success because it will be a often action and its not comfortable to fire info
+    // every time when i want incomplete for example about 5 or 10 todos in one time
     function incompleteTodoHandler(id) {
         dispatch(incompleteTodo(id,
             (error) => {
@@ -106,8 +118,6 @@ export default function TodoTable(props) {
             )
         )
     }
-
-    console.log(filteredData)
 
     return (
         <>

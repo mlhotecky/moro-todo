@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 import "./ModalWindow.scss";
 
+//component for work with forms in modal windows
 export default function ModalForm(props) {
     const {
         isOpen,
@@ -10,6 +11,7 @@ export default function ModalForm(props) {
         headerText,
     } = props;
 
+    // by documentation, its difficult to access by scss file
     const customStyles = {
         content: {
             top: '50%',
@@ -22,6 +24,10 @@ export default function ModalForm(props) {
         }
     };
 
+    // modal wrapper header only - actions defined in formComponent
+    // previous architecture because redux form want onSubmit={handleSubmit} definition and button type submit inside of form
+    // unnecessary duplicate definition of redux form if i want submit button outside
+    // now it can be solved by callback function
     return (
         <Modal
             isOpen={isOpen}

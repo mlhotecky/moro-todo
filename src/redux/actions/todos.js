@@ -6,7 +6,7 @@ import {API_PREFIX} from "../../constants";
 // returns all todos
 export const GET_TODOS = "GET_TODOS";
 
-// universal const for catch phase of api call
+// universal const for get phase of api call
 export const GET_ALL_TODO_STATUS = "GET_ALL_TODO_STATUS";
 
 export const PENDING = "PENDING";
@@ -52,7 +52,7 @@ export const createTodo = (
     }).catch(e => {
         error(e.response.status);
     }).finally(() => {
-        final()
+        final();
     })
 }
 

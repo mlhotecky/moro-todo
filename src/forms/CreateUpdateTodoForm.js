@@ -6,6 +6,7 @@ import "./Forms.scss";
 
 export default function CreateUpdateTodoForm(props) {
 
+    // props from modal
     const {
         actionHandler,
         actionPending,
@@ -15,43 +16,59 @@ export default function CreateUpdateTodoForm(props) {
         initial
     } = props?.todoObject || {};
 
+    // initial attributes and values of form
     const initialFields = {
         text: ""
     }
 
-    const [value, setValue] = useState(initial || initialFields);
-    const [touched, setTouched] = useState([]);
+    // definition of form object - initial when update || initialFields when create new one
+    const [formValues, setFormValues] = useState(initial || initialFields);
 
+    // array of touched fields for showing validation messages
+    const [touchedFields, setTouchedFields] = useState([]);
+
+    // all field names of form - only text in this case
     const formFields = ["text"];
-    const val = (name) => value?.[name] || "";
-    const validForm = value?.text?.length > 0;
 
-    const touchField = ({target: {name, value}}) => {
-        const newTouched = [...touched];
-        if (!newTouched.includes(name)) {
-        newTouched.push(name);
+    // const for return value by name or initial value
+    // can be made with typeof validation but it is´nt necessary in this case
+    const val = (name) => formValues?.[name] || "";
+
+    // very simplified for one input
+    // can be solved with foreach by Object.entries(value) with typeof validation and counter for exceptions
+    const validForm = formValues?.text?.length > 0;
+
+    // function for touch field after onBlur input event
+    function touchField({target: {name}}) {
+        const newTouchedFields = [...touchedFields];
+        if (!newTouchedFields.includes(name)) {
+            newTouchedFields.push(name);
         }
-        setTouched(newTouched);
+        setTouchedFields(newTouchedFields);
     }
 
+    // function for touch all fields after form has invalid values
     function touchAll() {
-        const newTouched = [];
+        const newTouchedFields = [];
         formFields.forEach(name => {
-            newTouched.push(name);
+            newTouchedFields.push(name);
         })
-        setTouched(newTouched);
+        setTouchedFields(newTouchedFields);
     }
 
+    // set value to form object by name of input
     const handleChange = ({target: {name, value}}) => {
-        setValue({
-            ...value,
+        setFormValues({
+            ...formValues,
             [name]: value
         });
     }
 
+    // submit form - if validation is ok, do callback by modal prop
+    // or touch all fields for displaying error messages
     function submitHandler() {
         if (validForm) {
-        actionHandler(value);
+        actionHandler(formValues);
         } else {
             touchAll();
         }
@@ -71,7 +88,7 @@ export default function CreateUpdateTodoForm(props) {
                                     onChange={handleChange}
                                     onBlur={touchField}
                                 />
-                                {touched?.includes("text") && value?.text?.length === 0 &&
+                                {touchedFields?.includes("text") && formValues?.text?.length === 0 &&
                                 <span className="form-error">Required</span>}
                         </Col>
                     </Row>

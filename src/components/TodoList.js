@@ -15,13 +15,17 @@ export default function TodoList(props) {
         dispatch(getAllTodos((error) => {
             toastr.error(`${error}`, "Error occurred while fetching todos.")
         }));
+        // if i want call this action once like componentDidMount its without deps
+        // but there is not default empty deps without warning
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     let content;
 
+    // wrapper for messages instead of table with todos - no data, network error
     const dataMessageWrapper = (message) => <div className="data-message"><span>{message}</span></div>
 
+    // display content by status of fetching todos
     switch (getTodoStatus) {
         case PENDING:
             content = (

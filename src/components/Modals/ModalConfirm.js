@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import ApiLoader from "../ApiLoader";
 import "./ModalWindow.scss";
 
+// component for displaying of confirm messages by modal window
 export default function ModalConfirm(props) {
     const {
         modalWidth,
@@ -16,6 +17,7 @@ export default function ModalConfirm(props) {
         actionPending
     } = props;
 
+    // by documentation, its difficult to access by scss file
     const customStyles = {
         content: {
             top: '50%',
@@ -28,6 +30,7 @@ export default function ModalConfirm(props) {
         }
     };
 
+    // modal wrapper with header and action / cancel buttons
     return (
         <Modal
             isOpen={isOpen}
