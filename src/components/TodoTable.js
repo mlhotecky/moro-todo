@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {toastr} from "react-redux-toastr";
 import {Row, Col} from "react-flexbox-grid";
@@ -142,27 +142,32 @@ export default function TodoTable(props) {
             />
             <div className="todo-table">
                 <Row className="todo-header">
-                    <Col xs={6}>Description</Col>
-                    <Col xs={2}>Created</Col>
-                    <Col xs={2}>Completed</Col>
-                    <Col xs={2} className="actions">Actions</Col>
+                    <Col className="todo-col" xs={6}>Description</Col>
+                    <Col className="todo-col" xs={2}>Created</Col>
+                    <Col className="todo-col" xs={2}>Completed</Col>
+                    <Col className="todo-col actions" xs={2}>Actions</Col>
                 </Row>
                 {filteredData.length > 0 && filteredData.map((todo, index) => {
                     return <Row key={index} className={`todo-row ${todo?.completed ? "completed" : ""}`}>
-                        <Col lg={6} md={6} sm={12}>
-                            <span className="mobile-header">Description: </span>
-                            <span>{todo?.text || ""}</span>
+                        <Col className="todo-col" lg={6} md={6} sm={12}>
+                            <div>
+                                <span className="mobile-header">Description:</span>
+                                <span>{todo?.text || ""}</span>
+                            </div>
                         </Col>
-                        <Col lg={2} md={2} sm={12}>
-                            <span className="mobile-header">Created: </span>
-                            <span>{todo?.createdDate ? new Date(todo.createdDate).toDateString() : ""}</span>
+                        <Col className="todo-col" lg={2} md={2} sm={12}>
+                            <div>
+                                <span className="mobile-header">Created:</span>
+                                <span>{todo?.createdDate ? new Date(todo.createdDate).toDateString() : ""}</span>
+                            </div>
                         </Col>
-                        <Col lg={2} md={2} sm={12}>
-                            <span className="mobile-header">Completed: </span>
-                            <span>{todo?.completedDate ? new Date(todo.completedDate).toDateString() : ""}</span>
+                        <Col className="todo-col" lg={2} md={2} sm={12}>
+                            <div>
+                                <span className="mobile-header">Completed: </span>
+                                <span>{todo?.completedDate ? new Date(todo.completedDate).toDateString() : ""}</span>
+                            </div>
                         </Col>
-                        <Col lg={2} md={2} sm={12}>
-                            <Row className="table-actions">
+                        <Col className="todo-col-actions" lg={2} md={2} sm={12}>
                                 <FontAwesomeIcon
                                     className="cursor-pointer"
                                     icon={faPencilAlt}
@@ -186,7 +191,6 @@ export default function TodoTable(props) {
                                     onClick={() => deleteTodoConfirm(todo.id)}
                                     icon={faTrash}
                                 />
-                            </Row>
                         </Col>
                     </Row>
                 })}
